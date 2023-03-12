@@ -2,9 +2,9 @@
 
 namespace Labdacaraka\WebInstaller;
 
+use Labdacaraka\WebInstaller\Commands\WebInstallerCommand;
 use Spatie\LaravelPackageTools\Package;
 use Spatie\LaravelPackageTools\PackageServiceProvider;
-use Labdacaraka\WebInstaller\Commands\WebInstallerCommand;
 
 class WebInstallerServiceProvider extends PackageServiceProvider
 {

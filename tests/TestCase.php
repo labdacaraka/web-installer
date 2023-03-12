@@ -3,8 +3,8 @@
 namespace Labdacaraka\WebInstaller\Tests;
 
 use Illuminate\Database\Eloquent\Factories\Factory;
-use Orchestra\Testbench\TestCase as Orchestra;
 use Labdacaraka\WebInstaller\WebInstallerServiceProvider;
+use Orchestra\Testbench\TestCase as Orchestra;
 
 class TestCase extends Orchestra
 {

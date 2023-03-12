@@ -19,6 +19,8 @@ class WebInstallerServiceProvider extends PackageServiceProvider
             ->name('web-installer')
             ->hasConfigFile()
             ->hasViews()
+            ->hasAssets()
+            ->hasRoutes(['web'])
             ->hasMigration('create_web-installer_table')
             ->hasCommand(WebInstallerCommand::class);
     }

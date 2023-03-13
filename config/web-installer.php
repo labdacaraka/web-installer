@@ -6,7 +6,6 @@ return [
      * Marketplace Settings
      * Used for checking purchase code
      * Marketplace: Envato
-     *
      */
     'marketplace' => [
         'envato' => [
@@ -27,7 +26,6 @@ return [
      * Used for checking requirements before installation
      * PHP Version, PHP Extensions, PHP Settings
      * Example: 'minimum_php_version' => '7.4', 'required_php_extensions' => ['openssl', 'mbstring', 'tokenizer', 'xml', 'ctype', 'json', 'curl', 'gd', 'fileinfo']
-     *
      */
     'minimum_php_version' => '8.1',
     'required_php_extensions' => [
@@ -76,7 +74,6 @@ return [
      *
      * Example: 'config:cache' => ['--env' => 'production']
      * Example: 'route:cache' => []
-     *
      */
     'project_init_commands' => [
         'optimize:clear' => [],
@@ -91,7 +88,6 @@ return [
     /**
      * Default login accounts
      * Used for showing default login accounts after installation
-     *
      */
     'default_login_accounts' => [
         [

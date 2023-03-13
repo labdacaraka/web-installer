@@ -12,8 +12,8 @@ class WebInstallerCommand extends Command
 
     public function handle(): int
     {
-        if($projectInitCommands = config('web-installer.project_init_commands')){
-            foreach ($projectInitCommands as $command => $arguments){
+        if ($projectInitCommands = config('web-installer.project_init_commands')) {
+            foreach ($projectInitCommands as $command => $arguments) {
                 $this->callSilently($command, $arguments);
             }
         }

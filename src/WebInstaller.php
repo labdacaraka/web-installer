@@ -109,6 +109,7 @@ class WebInstaller
         }
         session()->forget('installation');
         Artisan::call('web-installer');
+
         return Artisan::output();
     }
 }

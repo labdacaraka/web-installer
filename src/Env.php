@@ -5,14 +5,18 @@ namespace Labdacaraka\WebInstaller;
 class Env
 {
     private $_envContent = null;
+
     private $_envVars = null;
+
     private $_envPath = null;
+
     private $_saved = false;
+
     private $_changed = false;
 
     public function __construct()
     {
-        /** @scrutinizer ignore-call */ $this->_envPath = app()->environmentFilePath();
+/** @scrutinizer ignore-call */ $this->_envPath = app()->environmentFilePath();
         $this->_envContent = file_get_contents($this->_envPath);
 
         $this->_parse();
@@ -26,18 +30,17 @@ class Env
         $env_lines = preg_split('/\r\n|\r|\n/', $this->_envContent);
 
         foreach ($env_lines as $line) {
-            if (strlen(trim($line)) && !(strpos(trim($line), '#') === 0)) {
-                [$key, $val] = explode('=', (string)$line);
+            if (strlen(trim($line)) && ! (strpos(trim($line), '#') === 0)) {
+                [$key, $val] = explode('=', (string) $line);
                 $this->_envVars[$key] = $this->_stripValue($val);
             }
         }
     }
 
-
     /**
      * Check if the variable exists
-     * @param string $key Environment variable key
-     * @return bool
+     *
+     * @param  string  $key Environment variable key
      */
     public function exists(string $key): bool
     {
@@ -51,8 +54,7 @@ class Env
     /**
      * Get the current env variable value
      *
-     * @param string $key Environment variable key
-     * @return string
+     * @param  string  $key Environment variable key
      */
     public function getValue(string $key): string
     {
@@ -63,12 +65,10 @@ class Env
         return $this->_envVars[$key] ?? '';
     }
 
-
     /**
      * Get env key-value
      *
-     * @param string $key Environment variable key
-     * @return array
+     * @param  string  $key Environment variable key
      */
     public function getKeyValue(string $key): array
     {
@@ -79,13 +79,12 @@ class Env
         return [$key => $this->_envVars[$key]] ?? [];
     }
 
-
     /**
      * Set env variable value
-     * @param string $key Environment variable key
-     * @param string $value Variable value
-     * @param bool $write Write changes to .env file
-     * @return string
+     *
+     * @param  string  $key Environment variable key
+     * @param  string  $value Variable value
+     * @param  bool  $write Write changes to .env file
      */
     public function setValue(string $key, string $value, $write = true): string
     {
@@ -94,7 +93,7 @@ class Env
         if ($this->exists($key)) {
             $this->_envContent = preg_replace("/^{$key}=.*$/m", "{$key}={$value}", $this->_envContent);
         } else {
-            $this->_envContent .= PHP_EOL . "{$key}={$value}" . PHP_EOL;
+            $this->_envContent .= PHP_EOL."{$key}={$value}".PHP_EOL;
         }
 
         $this->_changed = true;
@@ -108,12 +107,11 @@ class Env
         return $this->getValue($key);
     }
 
-
     /**
      * Delete environment variable
-     * @param string $key Environment variable key
-     * @param bool $write Write changes to .env file
-     * @return bool
+     *
+     * @param  string  $key Environment variable key
+     * @param  bool  $write Write changes to .env file
      */
     public function deleteVariable(string $key, bool $write = true): bool
     {
@@ -138,7 +136,7 @@ class Env
         $to = [];
 
         for ($i = 0; $i < strlen($exclude); $i++) {
-            $from[] = '\\' . $exclude[$i];
+            $from[] = '\\'.$exclude[$i];
             $to[] = $exclude[$i];
         }
 
@@ -147,13 +145,11 @@ class Env
 
     /**
      * Check and prepare value to be safe
-     * @param string $value
-     * @return string
      */
     private function _prepareValue(string $value): string
     {
         if (false !== strpos($value, ' ') || (strlen($value) && in_array($value[0], ['=', '$']))) {
-            $value = '"' . $value . '"';
+            $value = '"'.$value.'"';
         }
 
         return $this->_preg_quote_except($value, ':.-');
@@ -166,8 +162,6 @@ class Env
 
     /**
      * Strip output value from quotes and inline comments
-     * @param string $value
-     * @return string
      */
     private function _stripValue(string $value): string
     {
@@ -178,7 +172,6 @@ class Env
 
     /**
      * Get all env variables
-     * @return array
      */
     public function getVariables(): array
     {
@@ -187,7 +180,6 @@ class Env
 
     /**
      * Get current env entire content from memory
-     * @return string
      */
     public function getEnvContent(): string
     {
@@ -196,7 +188,6 @@ class Env
 
     /**
      * Write env config to file
-     * @return bool
      */
     public function write(): bool
     {
@@ -207,7 +198,6 @@ class Env
 
     /**
      * Check if the changes has been saved
-     * @return bool
      */
     public function isSaved(): bool
     {
@@ -216,7 +206,6 @@ class Env
 
     /**
      * Check if there were any env content changes
-     * @return bool
      */
     public function wasChanged(): bool
     {

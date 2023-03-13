@@ -5,7 +5,6 @@ return [
     /**
      * Marketplace Settings
      * Supported: envato
-     *
      */
     'marketplace' => [
         'envato' => [
@@ -17,7 +16,7 @@ return [
             'item_id' => env('ENVATO_ITEM_ID'),
             'username' => env('ENVATO_USERNAME'),
             'token' => env('ENVATO_PERSONAL_TOKEN', 'vWHYVzh043De2aehXh7pgmbpNSJDmUdW'),
-            'sandbox_token' => 'cFAKETOKENabcREPLACEMExyzcdefghj'
+            'sandbox_token' => 'cFAKETOKENabcREPLACEMExyzcdefghj',
         ],
     ],
 
@@ -64,7 +63,7 @@ return [
             'email' => 'admin@labdacaraka.com',
             'password' => '123123',
             'name' => 'Admin',
-        ]
-    ]
+        ],
+    ],
 
 ];

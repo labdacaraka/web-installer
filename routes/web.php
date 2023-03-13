@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use Labdacaraka\WebInstaller\Controllers\InstallerController;
+use Labdacaraka\WebInstaller\Middlewares\RedirectIfInstalled;
 
 /*
 |--------------------------------------------------------------------------
@@ -18,7 +19,7 @@ use Labdacaraka\WebInstaller\Controllers\InstallerController;
 //});
 
 // Route group for web installer
-Route::group(['prefix' => 'install', 'as' => 'web-installer.', 'middleware' => ['web']], function () {
+Route::group(['prefix' => 'install', 'as' => 'web-installer.', 'middleware' => ['web', RedirectIfInstalled::class]], function () {
     Route::get('/', [InstallerController::class, 'index'])->name('welcome');
     Route::post('/validate-purchase-code', [InstallerController::class, 'validatePurchaseCode'])->name('validate-purchase-code');
     Route::get('/check-requirements', [InstallerController::class, 'checkRequirements'])->name('check-requirements');
@@ -29,6 +30,6 @@ Route::group(['prefix' => 'install', 'as' => 'web-installer.', 'middleware' => [
     Route::post('/database-settings', [InstallerController::class, 'databaseSettingStore'])->name('database-settings-store');
     Route::post('/database', [InstallerController::class, 'saveDatabase'])->name('database.save');
     Route::get('/final', [InstallerController::class, 'final'])->name('final');
-    Route::post('/install', [InstallerController::class, 'finalInstall'])->name('final-install');
+    Route::post('/run', [InstallerController::class, 'runInstall'])->name('run-install');
 
 });

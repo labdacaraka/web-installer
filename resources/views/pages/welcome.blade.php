@@ -17,9 +17,10 @@
         </div>
         @include('web-installer::pages.partials.forms.envato-validation-purchase-code-form')
         <div class="d-grid gap-2 mt-3">
-            <button class="btn btn-success" type="submit"><i class="fa-solid fa-list-check"></i> {{ trans('Validate Code') }}</button>
             @if(session('installation.purchases.verified'))
-                <a class="btn btn-success" href="{{ route('web-installer.check-requirements') }}" type="button"><i class="fa-solid fa-list-check"></i> {{ trans('Check Requirements') }}</a>
+                <a class="btn btn-success" href="{{ route('web-installer.check-requirements') }}" type="button"><i class="fa-solid fa-list-check"></i> {{ trans('Next! Check Requirements') }}</a>
+            @else
+                <button class="btn btn-success" type="submit"><i class="fa-solid fa-barcode"></i> {{ trans('Validate Code') }}</button>
             @endif
         </div>
     </form>

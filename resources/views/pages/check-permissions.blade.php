@@ -3,11 +3,11 @@
 @section('content')
     @if($permissionCompatible)
         <div class="alert alert-success" role="alert">
-            {{ trans('Great ! All Compatible') }}
+            {{ trans('Great! Folder write access permissions have been updated. You now have write access to the folder.') }}
         </div>
     @else
         <div class="alert alert-danger" role="alert">
-            {{ trans("Oops ! Not All Compatible") }}
+            {{ trans("Oops! You do not have access to the requested folder. Please contact your administrator to request access permission.") }}
         </div>
     @endif
     <div class="accordion" id="check-compatible">
@@ -41,12 +41,12 @@
     </div>
 
     <div class="d-grid gap-2 mt-3">
-        <a class="btn btn-warning" href="{{ route('web-installer.check-requirements') }}" type="button"><i class="fa-solid fa-circle-chevron-left"></i> {{ trans('Previous') }}</a>
         @if($permissionCompatible)
-            <a class="btn btn-success" href="" type="button"><i class="fa fa-check"></i> {{ trans('Next') }}</a>
+            <a class="btn btn-success" href="{{ route('web-installer.app-settings') }}" type="button"><i class="fa-solid fa-gear"></i> {{ trans('Next! App Setting') }}</a>
         @else
-            <a class="btn btn-primary" href="" type="button"><i class="fa fa-check"></i> {{ trans('Check Again') }}</a>
+            <a class="btn btn-primary" href="" type="button"><i class="fa-solid fa-rotate"></i> {{ trans('Reload') }}</a>
         @endif
+        <a class="btn btn-warning" href="{{ route('web-installer.check-requirements') }}" type="button"><i class="fa-solid fa-circle-chevron-left"></i> {{ trans('Previous') }}</a>
     </div>
 @endsection
 

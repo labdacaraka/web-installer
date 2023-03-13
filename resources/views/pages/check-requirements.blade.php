@@ -3,11 +3,11 @@
 @section('content')
     @if($allCompatible)
         <div class="alert alert-success" role="alert">
-            {{ trans('Great ! All Compatible') }}
+            {{ trans('Great! All requirements for the PHP based web server have been fulfilled.') }}
         </div>
     @else
         <div class="alert alert-danger" role="alert">
-            {{ trans("Oops ! Not All Compatible") }}
+            {{ trans("Oops! The server does not meet the minimum requirements to run PHP Laravel. Please contact our customer support team for further assistance.") }}
         </div>
     @endif
     <div class="accordion" id="check-compatible">
@@ -117,12 +117,12 @@
     </div>
 
     <div class="d-grid gap-2 mt-3">
-            <a class="btn btn-warning" href="{{ route('web-installer.welcome') }}" type="button"><i class="fa-solid fa-circle-chevron-left"></i> {{ trans('Previous') }}</a>
         @if($allCompatible)
-            <a class="btn btn-success" href="{{ route('web-installer.check-permissions') }}" type="button"><i class="fa-solid fa-folder"></i> {{ trans('Check Directory Permissions') }}</a>
+            <a class="btn btn-success" href="{{ route('web-installer.check-permissions') }}" type="button"><i class="fa-solid fa-folder"></i> {{ trans('Next! Check Directory Permissions') }}</a>
         @else
-            <a class="btn btn-primary" href="" type="button"><i class="fa fa-check"></i> {{ trans('Check Again') }}</a>
+            <a class="btn btn-primary" href="" type="button"><i class="fa-solid fa-rotate"></i> {{ trans('Reload') }}</a>
         @endif
+            <a class="btn btn-warning" href="{{ route('web-installer.welcome') }}" type="button"><i class="fa-solid fa-circle-chevron-left"></i> {{ trans('Previous') }}</a>
     </div>
 @endsection
 

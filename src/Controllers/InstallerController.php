@@ -22,12 +22,36 @@ class InstallerController extends Controller
         return view('web-installer::pages.welcome');
     }
 
+    public function validatePurchaseCode(Request $request): RedirectResponse
+    {
+        session()->forget('installation.purchases');
+
+        $rules = [
+            'purchase_code' => ['required', 'string'],
+            'envato_username' => ['required', 'string'],
+            'envato_item_id' => ['required', 'string'],
+        ];
+        $request->validate($rules);
+
+        $purchaseCode = $request->input('purchase_code');
+        $envatoUsername = $request->input('envato_username');
+        $itemId = $request->input('envato_item_id');
+
+        $verifyPurchaseCodeStatus = app(WebInstaller::class)->verifyPurchaseCode($purchaseCode, $envatoUsername, $itemId);
+        if($verifyPurchaseCodeStatus) {
+            return redirect()->route('web-installer.check-requirements')->with('success', 'Purchase code is valid');
+        } else {
+            return redirect()->back()->with('error', 'Purchase code is invalid');
+        }
+    }
+
     /**
      * Check requirements
      *
      */
     public function checkRequirements(): \Illuminate\Contracts\Foundation\Application|Factory|View|Application|RedirectResponse
     {
+        session()->forget('installation.check_requirements');
         if(!session()->has('installation.purchases')){
             return redirect()->route('web-installer.welcome');
         }
@@ -74,6 +98,7 @@ class InstallerController extends Controller
 
     public function checkPermissions(): View|Application|Factory|\Illuminate\Contracts\Foundation\Application|RedirectResponse
     {
+        session()->forget('installation.check_permissions');
         if(!session()->has('installation.check_requirements')){
             return redirect()->route('web-installer.check-requirements');
         }
@@ -95,32 +120,6 @@ class InstallerController extends Controller
         return view('web-installer::pages.check-permissions', compact('permissions', 'permissionCompatible'));
     }
 
-    public function checkDatabase(): View|Application|Factory|\Illuminate\Contracts\Foundation\Application
-    {
-        return view('web-installer::pages.check-database');
-    }
-
-    public function validatePurchaseCode(Request $request): RedirectResponse
-    {
-        $rules = [
-            'purchase_code' => ['required', 'string'],
-            'envato_username' => ['required', 'string'],
-            'envato_item_id' => ['required', 'string'],
-        ];
-        $request->validate($rules);
-
-        $purchaseCode = $request->input('purchase_code');
-        $envatoUsername = $request->input('envato_username');
-        $itemId = $request->input('envato_item_id');
-
-        $verifyPurchaseCodeStatus = app(WebInstaller::class)->verifyPurchaseCode($purchaseCode, $envatoUsername, $itemId);
-        if($verifyPurchaseCodeStatus) {
-            return redirect()->route('web-installer.check-requirements')->with('success', 'Purchase code is valid');
-        } else {
-            return redirect()->back()->with('error', 'Purchase code is invalid');
-        }
-    }
-
     public function appSettings(): View|Application|Factory|\Illuminate\Contracts\Foundation\Application|RedirectResponse
     {
         if(!session()->has('installation.check_permissions')){
@@ -139,6 +138,7 @@ class InstallerController extends Controller
      */
     public function appSettingStore(Request $request): RedirectResponse
     {
+        session()->forget('installation.app_settings');
         $request->validate([
             'app_name' => ['required', 'string'],
             'app_url' => ['required', 'string'],
@@ -163,6 +163,7 @@ class InstallerController extends Controller
 
     public function databaseSettingStore(Request $request): RedirectResponse
     {
+        session()->forget('installation.database_settings');
         $dbConnections = config('database.connections');
         $dbConnectionExceptSqlite = array_diff(array_keys($dbConnections), ['sqlite']);
         $request->validate([
@@ -205,16 +206,22 @@ class InstallerController extends Controller
     }
 
     /**
+     * Final installation
+     *
+     * @return \Illuminate\Http\JsonResponse
      * @throws NotFoundExceptionInterface
      * @throws ContainerExceptionInterface
      */
-    public function finalInstall(): RedirectResponse
+    public function runInstall(Request $request): \Illuminate\Http\JsonResponse
     {
-        $installStatus = app(WebInstaller::class)->install();
-        if($installStatus){
-            return redirect()->route('web-installer.final')->with('success', 'Installation completed successfully');
-        }else{
-            return redirect()->route('web-installer.final')->with('error', 'Installation failed');
+        if(!$request->ajax()){
+            abort(404);
+        }
+        try {
+            $output = app(WebInstaller::class)->install();
+            return response()->json(['success' => true, 'message' => trans('Installation completed successfully'), 'output' => $output]);
+        } catch (Exception $e) {
+            return response()->json(['success' => false, 'message' => $e->getMessage()], 500);
         }
     }
 }

@@ -80,8 +80,11 @@
 
 
         <div class="d-grid gap-2 mt-3">
-            <a class="btn btn-warning" href="{{ route('web-installer.check-permissions') }}" type="button"><i class="fa-solid fa-chevron-left"></i> {{ trans('Previous') }}</a>
-            <button class="btn btn-primary" type="submit"><i class="fa-solid fa-save"></i> {{ trans('Save & Continue') }}</button>
+            <button class="btn btn-primary" type="submit"><i class="fa-solid fa-plug-circle-check"></i> {{ trans('Check Connection') }}</button>
+            @if(session()->has('installation.database_settings'))
+                <a class="btn btn-success" href="{{ route('web-installer.final') }}"><i class="fa-solid fa-clipboard-list"></i> {{ trans('Next! Run Installation') }}</a>
+            @endif
+            <a class="btn btn-warning" href="{{ route('web-installer.check-permissions') }}" type="button"><i class="fa-solid fa-circle-chevron-left"></i> {{ trans('Previous') }}</a>
         </div>
     </form>
 @endsection

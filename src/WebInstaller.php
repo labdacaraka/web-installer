@@ -4,6 +4,7 @@ namespace Labdacaraka\WebInstaller;
 
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Log;
 use Psr\Container\ContainerExceptionInterface;
 use Psr\Container\NotFoundExceptionInterface;
 
@@ -60,9 +61,8 @@ class WebInstaller
             return false;
         }
         $response = $response->json();
-//        return $response;
-        $envatoUsername = 'buyer_username_or_null';
-        $itemId = 17022701;
+//        $envatoUsername = 'buyer_username_or_null';
+//        $itemId = 17022701;
         if($response['item']['id'] != $itemId || $response['buyer'] != $envatoUsername){
             return false;
         }
@@ -100,11 +100,11 @@ class WebInstaller
     /**
      * Install application
      *
-     * @return void
+     * @return string
      * @throws ContainerExceptionInterface
      * @throws NotFoundExceptionInterface
      */
-    public function install(): void
+    public function install(): string
     {
         $this->putPermanentEnv('APP_NAME', session()->get('installation.app_settings.app_name'));
         $this->putPermanentEnv('APP_ENV', session()->get('installation.app_settings.app_env'));
@@ -113,20 +113,27 @@ class WebInstaller
         $this->putPermanentEnv('APP_TIMEZONE', session()->get('installation.app_settings.app_timezone'));
 //        $this->putPermanentEnv('APP_LOCALE', session()->get('installation.app_settings.app_locale'));
 //        $this->putPermanentEnv('APP_FALLBACK_LOCALE', session()->get('installation.app_settings.app_fallback_locale'));
-        $this->putPermanentEnv('APP_KEY', session()->get('installation.app_settings.app_key'));
-        $this->putPermanentEnv('APP_CIPHER', session()->get('installation.app_settings.app_cipher'));
+        $this->putPermanentEnv('ENVATO_PURCHASE_CODE', session()->get('installation.purchases.purchase_code'));
+        $this->putPermanentEnv('ENVATO_USERNAME', session()->get('installation.purchases.envato_username'));
+        $this->putPermanentEnv('ENVATO_ITEM_ID', session()->get('installation.purchases.envato_item_id'));
         $this->putPermanentEnv('DB_CONNECTION', session()->get('installation.database_settings.db_connection'));
-        $this->putPermanentEnv('DB_HOST', session()->get('installation.database_settings.db_host'));
-        $this->putPermanentEnv('DB_PORT', session()->get('installation.database_settings.db_port'));
-        $this->putPermanentEnv('DB_DATABASE', session()->get('installation.database_settings.db_database'));
-        $this->putPermanentEnv('DB_USERNAME', session()->get('installation.database_settings.db_username'));
-        $this->putPermanentEnv('DB_PASSWORD', session()->get('installation.database_settings.db_password'));
-
-        Artisan::call('key:generate --force');
-        Artisan::call('migrate:fresh --seed');
-        Artisan::call('storage:link');
-        Artisan::call('config:cache');
-        Artisan::call('route:cache');
-        Artisan::call('view:cache');
+        if(session()->get('installation.database_settings.db_connection') == 'sqlite'){
+            $this->putPermanentEnv('DATABASE_URL', session()->get('installation.database_settings.db_url'));
+            $this->putPermanentEnv('DB_HOST', '');
+            $this->putPermanentEnv('DB_PORT', '');
+            $this->putPermanentEnv('DB_DATABASE', '');
+            $this->putPermanentEnv('DB_USERNAME', '');
+            $this->putPermanentEnv('DB_PASSWORD', '');
+        }else{
+            $this->putPermanentEnv('DATABASE_URL', '');
+            $this->putPermanentEnv('DB_HOST', session()->get('installation.database_settings.db_host'));
+            $this->putPermanentEnv('DB_PORT', session()->get('installation.database_settings.db_port'));
+            $this->putPermanentEnv('DB_DATABASE', session()->get('installation.database_settings.db_name'));
+            $this->putPermanentEnv('DB_USERNAME', session()->get('installation.database_settings.db_username'));
+            $this->putPermanentEnv('DB_PASSWORD', session()->get('installation.database_settings.db_password'));
+        }
+        Artisan::call('web-installer');
+        Artisan::output();
+        return 'success';
     }
 }

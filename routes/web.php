@@ -31,4 +31,5 @@ Route::group(['prefix' => 'install', 'as' => 'web-installer.', 'middleware' => [
     Route::post('/database', [InstallerController::class, 'saveDatabase'])->name('database.save');
     Route::get('/final', [InstallerController::class, 'final'])->name('final');
     Route::post('/run', [InstallerController::class, 'runInstall'])->name('run-install');
+    Route::get('/run', [InstallerController::class, 'runInstall'])->name('run-install-get');
 });

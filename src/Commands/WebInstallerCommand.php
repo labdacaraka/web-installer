@@ -12,10 +12,11 @@ class WebInstallerCommand extends Command
 
     public function handle(): int
     {
-        $this->callSilently('migrate:fresh');
-        $this->callSilently('db:seed');
-        $this->callSilently('storage:link');
-//        $this->callSilently('key:generate', ['--force' => true]);
+        if($projectInitCommands = config('web-installer.project_init_commands')){
+            foreach ($projectInitCommands as $command => $arguments){
+                $this->callSilently($command, $arguments);
+            }
+        }
         $this->comment('All done');
 
         return self::SUCCESS;

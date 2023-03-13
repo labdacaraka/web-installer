@@ -4,7 +4,9 @@
 return [
     /**
      * Marketplace Settings
-     * Supported: envato
+     * Used for checking purchase code
+     * Marketplace: Envato
+     *
      */
     'marketplace' => [
         'envato' => [
@@ -22,6 +24,10 @@ return [
 
     /**
      * Setting Requirements
+     * Used for checking requirements before installation
+     * PHP Version, PHP Extensions, PHP Settings
+     * Example: 'minimum_php_version' => '7.4', 'required_php_extensions' => ['openssl', 'mbstring', 'tokenizer', 'xml', 'ctype', 'json', 'curl', 'gd', 'fileinfo']
+     *
      */
     'minimum_php_version' => '8.1',
     'required_php_extensions' => [
@@ -45,12 +51,18 @@ return [
 
     /**
      * Setting directory Permissions
+     * Used for writing permissions to directories
+     * Example: storage, bootstrap/cache
      */
     'writeable_directories' => [
         'storage',
         'bootstrap/cache',
     ],
 
+    /**
+     * Available environments
+     * Example: Local, Development, Staging, Production
+     */
     'available_environments' => [
         'local',
         'development',
@@ -58,6 +70,29 @@ return [
         'production',
     ],
 
+    /**
+     * Project initialization commands
+     * key: command name, value: array of arguments
+     *
+     * Example: 'config:cache' => ['--env' => 'production']
+     * Example: 'route:cache' => []
+     *
+     */
+    'project_init_commands' => [
+        'optimize:clear' => [],
+        'migrate:fresh' => [],
+        'db:seed' => [],
+        'storage:link' => [],
+        'config:cache' => [],
+        'route:cache' => [],
+        'view:cache' => [],
+    ],
+
+    /**
+     * Default login accounts
+     * Used for showing default login accounts after installation
+     *
+     */
     'default_login_accounts' => [
         [
             'email' => 'admin@labdacaraka.com',

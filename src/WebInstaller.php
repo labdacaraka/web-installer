@@ -74,23 +74,6 @@ class WebInstaller
     }
 
     /**
-     * Write to env file
-     */
-    public function putPermanentEnv($key, $value): void
-    {
-        $path = app()->environmentFilePath();
-
-        $escapedOne = preg_quote('="'.env($key).'"', '/');
-        $escapedTwo = preg_quote('='.env($key), '/');
-
-        file_put_contents($path, preg_replace(
-            "/^{$key}{$escapedOne}|^{$key}{$escapedTwo}/m",
-            "$key=\"$value\"",
-            file_get_contents($path)
-        ));
-    }
-
-    /**
      * Install application
      *
      * @throws ContainerExceptionInterface
@@ -98,35 +81,34 @@ class WebInstaller
      */
     public function install(): string
     {
-        $this->putPermanentEnv('APP_NAME', session()->get('installation.app_settings.app_name'));
-        $this->putPermanentEnv('APP_ENV', session()->get('installation.app_settings.app_env'));
-        $this->putPermanentEnv('APP_DEBUG', session()->get('installation.app_settings.app_debug'));
-        $this->putPermanentEnv('APP_URL', session()->get('installation.app_settings.app_url'));
-        $this->putPermanentEnv('APP_TIMEZONE', session()->get('installation.app_settings.app_timezone'));
-//        $this->putPermanentEnv('APP_LOCALE', session()->get('installation.app_settings.app_locale'));
-//        $this->putPermanentEnv('APP_FALLBACK_LOCALE', session()->get('installation.app_settings.app_fallback_locale'));
-        $this->putPermanentEnv('ENVATO_PURCHASE_CODE', session()->get('installation.purchases.purchase_code'));
-        $this->putPermanentEnv('ENVATO_USERNAME', session()->get('installation.purchases.envato_username'));
-        $this->putPermanentEnv('ENVATO_ITEM_ID', session()->get('installation.purchases.envato_item_id'));
-        $this->putPermanentEnv('DB_CONNECTION', session()->get('installation.database_settings.db_connection'));
+        $env = new Env();
+        $env->setValue('APP_NAME', session()->get('installation.app_settings.app_name'));
+        $env->setValue('APP_ENV', session()->get('installation.app_settings.app_env'));
+        $env->setValue('APP_DEBUG', session()->get('installation.app_settings.app_debug') == 1);
+        $env->setValue('APP_URL', session()->get('installation.app_settings.app_url'));
+        $env->setValue('APP_TIMEZONE', session()->get('installation.app_settings.app_timezone'));
+        $env->setValue('ENVATO_PURCHASE_CODE', session()->get('installation.purchases.purchase_code'));
+        $env->setValue('ENVATO_USERNAME', session()->get('installation.purchases.envato_username'));
+        $env->setValue('ENVATO_ITEM_ID', session()->get('installation.purchases.envato_item_id'));
+        $env->setValue('MARKETPLACE', session()->get('installation.purchases.marketplace'));
+        $env->setValue('DB_CONNECTION', session()->get('installation.database_settings.db_connection'));
         if (session()->get('installation.database_settings.db_connection') == 'sqlite') {
-            $this->putPermanentEnv('DATABASE_URL', session()->get('installation.database_settings.db_url'));
-            $this->putPermanentEnv('DB_HOST', '');
-            $this->putPermanentEnv('DB_PORT', '');
-            $this->putPermanentEnv('DB_DATABASE', '');
-            $this->putPermanentEnv('DB_USERNAME', '');
-            $this->putPermanentEnv('DB_PASSWORD', '');
+            $env->setValue('DATABASE_URL', session()->get('installation.database_settings.db_url'));
+            $env->setValue('DB_HOST', '');
+            $env->setValue('DB_PORT', '');
+            $env->setValue('DB_DATABASE', '');
+            $env->setValue('DB_USERNAME', '');
+            $env->setValue('DB_PASSWORD', '');
         } else {
-            $this->putPermanentEnv('DATABASE_URL', '');
-            $this->putPermanentEnv('DB_HOST', session()->get('installation.database_settings.db_host'));
-            $this->putPermanentEnv('DB_PORT', session()->get('installation.database_settings.db_port'));
-            $this->putPermanentEnv('DB_DATABASE', session()->get('installation.database_settings.db_name'));
-            $this->putPermanentEnv('DB_USERNAME', session()->get('installation.database_settings.db_username'));
-            $this->putPermanentEnv('DB_PASSWORD', session()->get('installation.database_settings.db_password'));
+            $env->setValue('DATABASE_URL', '');
+            $env->setValue('DB_HOST', session()->get('installation.database_settings.db_host'));
+            $env->setValue('DB_PORT', session()->get('installation.database_settings.db_port'));
+            $env->setValue('DB_DATABASE', session()->get('installation.database_settings.db_name'));
+            $env->setValue('DB_USERNAME', session()->get('installation.database_settings.db_username'));
+            $env->setValue('DB_PASSWORD', session()->get('installation.database_settings.db_password'));
         }
+        session()->forget('installation');
         Artisan::call('web-installer');
-        Artisan::output();
-
-        return 'success';
+        return Artisan::output();
     }
 }

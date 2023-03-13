@@ -221,8 +221,12 @@ class InstallerController extends Controller
         }
         try {
             $output = app(WebInstaller::class)->install();
-
-            return response()->json(['success' => true, 'message' => trans('Installation completed successfully'), 'output' => $output]);
+            $defaultLoginAccounts = config('web-installer.default_login_accounts');
+            $data = [
+                'default_login_accounts' => $defaultLoginAccounts,
+                'output' => $output,
+            ];
+            return response()->json(['success' => true, 'message' => trans('Installation completed successfully. The page will reload 3 seconds later...'), 'data' => $data]);
         } catch (Exception $e) {
             return response()->json(['success' => false, 'message' => $e->getMessage()], 500);
         }

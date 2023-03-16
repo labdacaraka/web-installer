@@ -9,7 +9,7 @@ return [
      */
     'marketplace' => [
         'envato' => [
-            'sandbox' => env('ENVATO_SANDBOX', true),
+            'sandbox' => env('ENVATO_SANDBOX', false),
             'api_url' => 'https://api.envato.com/v3/market/',
             'sandbox_url' => 'https://sandbox.bailey.sh/v3/market/',
             'verify_endpoint' => 'author/sale?code=',

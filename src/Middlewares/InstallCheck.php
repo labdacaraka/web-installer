@@ -12,9 +12,10 @@ class InstallCheck
         $purchaseCode = config('web-installer.marketplace.envato.purchase_code');
         $itemId = config('web-installer.marketplace.envato.item_id');
         if (! $envatoUsername || ! $purchaseCode || ! $itemId) {
-            if($request->ajax() || $request->wantsJson()){
-                return response()->json(['success'=> false, 'message' => trans('You need install first')], 403);
+            if ($request->ajax() || $request->wantsJson()) {
+                return response()->json(['success' => false, 'message' => trans('You need install first')], 403);
             }
+
             return redirect('/install');
         }
 

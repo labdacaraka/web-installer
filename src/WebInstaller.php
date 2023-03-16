@@ -48,17 +48,14 @@ class WebInstaller
         if ($marketplace == 'envato') {
             $response = Http::contentType('application/json')
                             ->withToken($personalToken)
-                            ->withUserAgent('insomnia/2023.1.0')
                             ->timeout(20)
-                            ->post($apiUrl);
+                            ->get($apiUrl);
         }
 
         if (! $response || $response->failed() || $response->status() != 200) {
             return false;
         }
         $response = $response->json();
-//        $envatoUsername = 'buyer_username_or_null';
-//        $itemId = 17022701;
         if ($response['item']['id'] != $itemId || $response['buyer'] != $envatoUsername) {
             return false;
         }

@@ -84,6 +84,7 @@ class WebInstaller
         $env->setValue('APP_DEBUG', session()->get('installation.app_settings.app_debug') == 1);
         $env->setValue('APP_URL', session()->get('installation.app_settings.app_url'));
         $env->setValue('APP_TIMEZONE', session()->get('installation.app_settings.app_timezone'));
+        $env->setValue('APP_LOCALE', session()->get('installation.app_settings.app_locale'));
         $env->setValue('ENVATO_PURCHASE_CODE', session()->get('installation.purchases.purchase_code'));
         $env->setValue('ENVATO_USERNAME', session()->get('installation.purchases.envato_username'));
         $env->setValue('ENVATO_ITEM_ID', session()->get('installation.purchases.envato_item_id'));
@@ -107,6 +108,17 @@ class WebInstaller
         session()->forget('installation');
         Artisan::call('web-installer');
 
+        return Artisan::output();
+    }
+
+    public function rollbackInstall(): string
+    {
+        $env = new Env();
+        $env->setValue('ENVATO_PURCHASE_CODE', '');
+        $env->setValue('ENVATO_USERNAME', '');
+        $env->setValue('ENVATO_ITEM_ID', '');
+        $env->setValue('MARKETPLACE', '');
+        Artisan::call('optimize:clear');
         return Artisan::output();
     }
 }

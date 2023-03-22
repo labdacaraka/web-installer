@@ -69,6 +69,16 @@
             @enderror
         </div>
 
+        <div class="mb-3">
+            <label for="applicationLocale" class="form-label">{{ trans('App Locale') }}</label>
+            <input type="text" class="form-control @error('app_locale') is-invalid @enderror" id="applicationLocale" placeholder="App Locale" name="app_locale" value="{{ old('app_locale', session('installation.app_settings.app_locale') ?? config('app.locale')) }}">
+            @error('app_locale')
+            <div class="invalid-feedback">
+                {{ $message }}
+            </div>
+            @enderror
+        </div>
+
         <div class="d-grid gap-2 mt-3">
             <button class="btn btn-primary" type="submit"><i class="fa-solid fa-save"></i> {{ trans('Save & Continue') }}</button>
             <a class="btn btn-warning" href="{{ route('web-installer.check-permissions') }}" type="button"><i class="fa-solid fa-circle-chevron-left"></i> {{ trans('Previous') }}</a>

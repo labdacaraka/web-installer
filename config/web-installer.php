@@ -80,9 +80,7 @@ return [
         'migrate:fresh' => [],
         'db:seed' => [],
         'storage:link' => [],
-        'config:cache' => [],
-        'route:cache' => [],
-        'view:cache' => [],
+        'optimize' => [],
     ],
 
     /**

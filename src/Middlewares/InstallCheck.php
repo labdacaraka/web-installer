@@ -8,7 +8,7 @@ class InstallCheck
 {
     public function handle(Request $request, \Closure $next)
     {
-        if($request->is('install') || $request->is('install/*')){
+        if ($request->is('install') || $request->is('install/*')) {
             return $next($request);
         }
         $envatoUsername = config('web-installer.marketplace.envato.username');

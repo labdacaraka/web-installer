@@ -119,6 +119,7 @@ class WebInstaller
         $env->setValue('ENVATO_ITEM_ID', '');
         $env->setValue('MARKETPLACE', '');
         Artisan::call('optimize:clear');
+
         return Artisan::output();
     }
 }

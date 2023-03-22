@@ -146,7 +146,7 @@ class InstallerController extends Controller
             'app_timezone' => ['required', 'string'],
             'app_locale' => ['required', 'string'],
         ]);
-        $appSettings = $request->only(['app_name', 'app_url', 'app_env', 'app_timezone','app_locale']);
+        $appSettings = $request->only(['app_name', 'app_url', 'app_env', 'app_timezone', 'app_locale']);
         $appSettings['app_debug'] = $request->has('app_debug');
         session()->put('installation.app_settings', $appSettings);
 
@@ -231,7 +231,8 @@ class InstallerController extends Controller
             return response()->json(['success' => true, 'message' => trans('Installation completed successfully. The page will reload 3 seconds later...'), 'data' => $data]);
         } catch (Exception $e) {
             app(WebInstaller::class)->rollbackInstall();
-            return response()->json(['success' => false, 'message' => 'Something wrong! ' . $e->getMessage()], 500);
+
+            return response()->json(['success' => false, 'message' => 'Something wrong! '.$e->getMessage()], 500);
         }
     }
 }

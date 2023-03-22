@@ -81,7 +81,7 @@ class InstallerController extends Controller
             $phpSettings[$requiredPhpSetting] = [
                 'current' => ini_get($requiredPhpSetting),
                 'required' => $requiredPhpSettingValue,
-                'compatible' => ini_get($requiredPhpSetting) >= $requiredPhpSettingValue,
+                'compatible' => $this->convertToBytes(ini_get($requiredPhpSetting)) >= $this->convertToBytes($requiredPhpSettingValue)
             ];
             if (! $phpSettings[$requiredPhpSetting]['compatible']) {
                 $phpSettingCompatible = false;
@@ -94,6 +94,26 @@ class InstallerController extends Controller
         }
 
         return view('web-installer::pages.check-requirements', compact('minimumPhpVersion', 'currentPhpVersion', 'phpExtensionsStatuses', 'phpSettings', 'phpVersionCompatible', 'phpExtensionsCompatible', 'phpSettingCompatible', 'allCompatible'));
+    }
+
+    private function convertToBytes($val): int|string
+    {
+        if(is_numeric($val)) {
+            return $val;
+        }
+        $val = trim($val);
+        $last = strtolower($val[strlen($val)-1]);
+        $val = substr($val, 0, -1);
+        switch($last) {
+            case 'g':
+                $val *= 1024;
+            case 'm':
+                $val *= 1024;
+            case 'k':
+                $val *= 1024;
+        }
+
+        return $val;
     }
 
     public function checkPermissions(): View|Application|Factory|\Illuminate\Contracts\Foundation\Application|RedirectResponse

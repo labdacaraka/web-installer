@@ -2,6 +2,10 @@
 
 All notable changes to `web-installer` will be documented in this file.
 
+## Improve some function - 2023-03-16
+
+Refactoring middleware and request method to envato site
+
 ## Labdacaraka Web Installer - 2023-03-13
 
 In this release, the web installer can already be used to install the Laravel application easily by simply filling out the form provided. The next development is to add an update feature for the application. Thank you.

@@ -99,7 +99,8 @@ class WebInstaller
             $env->setValue('DB_USERNAME', '');
             $env->setValue('DB_PASSWORD', '');
 
-            config('database.connections.'.$dbConnection.'.url', session()->get('installation.database_settings.db_url'));
+            config('database.connections.'.$dbConnection.'.url')->set(session()->get('installation.database_settings.db_url'));
+
         } else {
             $env->setValue('DATABASE_URL', '');
             $env->setValue('DB_HOST', session()->get('installation.database_settings.db_host'));
@@ -108,11 +109,11 @@ class WebInstaller
             $env->setValue('DB_USERNAME', session()->get('installation.database_settings.db_username'));
             $env->setValue('DB_PASSWORD', session()->get('installation.database_settings.db_password'));
 
-            config('database.connections.'.$dbConnection.'.host', session()->get('installation.database_settings.db_host'));
-            config('database.connections.'.$dbConnection.'.port', session()->get('installation.database_settings.db_port'));
-            config('database.connections.'.$dbConnection.'.database', session()->get('installation.database_settings.db_name'));
-            config('database.connections.'.$dbConnection.'.username', session()->get('installation.database_settings.db_username'));
-            config('database.connections.'.$dbConnection.'.password', session()->get('installation.database_settings.db_password'));
+            config('database.connections.'.$dbConnection.'.host')->set(session()->get('installation.database_settings.db_host'));
+            config('database.connections.'.$dbConnection.'.port')->set(session()->get('installation.database_settings.db_port'));
+            config('database.connections.'.$dbConnection.'.database')->set(session()->get('installation.database_settings.db_name'));
+            config('database.connections.'.$dbConnection.'.username')->set(session()->get('installation.database_settings.db_username'));
+            config('database.connections.'.$dbConnection.'.password')->set(session()->get('installation.database_settings.db_password'));
         }
         session()->forget('installation');
 

@@ -115,7 +115,7 @@ class WebInstaller
             config('database.connections.'.$dbConnection.'.password', session()->get('installation.database_settings.db_password'));
         }
         session()->forget('installation');
-        Artisan::call('web-installer', ['--force' => true]);
+        Artisan::call('web-installer', ['-n' => true]);
 
         return Artisan::output();
     }
@@ -127,7 +127,7 @@ class WebInstaller
         $env->setValue('ENVATO_USERNAME', '');
         $env->setValue('ENVATO_ITEM_ID', '');
         $env->setValue('MARKETPLACE', '');
-        Artisan::call('optimize:clear', ['--force' => true]);
+        Artisan::call('optimize:clear', ['-n' => true]);
 
         return Artisan::output();
     }

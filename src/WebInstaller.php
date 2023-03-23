@@ -115,6 +115,9 @@ class WebInstaller
             config('database.connections.'.$dbConnection.'.password', session()->get('installation.database_settings.db_password'));
         }
         session()->forget('installation');
+
+        // wait for 5 seconds to make sure the env file is updated
+        sleep(5);
         Artisan::call('web-installer', ['-n' => true]);
 
         return Artisan::output();

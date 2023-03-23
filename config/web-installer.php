@@ -76,11 +76,9 @@ return [
      * Example: 'route:cache' => []
      */
     'project_init_commands' => [
-        'optimize:clear' => [],
-        'migrate:fresh' => [],
-        'db:seed' => [],
-        'storage:link' => [],
-        'optimize' => [],
+        'optimize:clear' => ['--force' => true],
+        'migrate:fresh' => ['--seed' => true, '--force' => true],
+        'optimize' => ['--force' => true],
     ],
 
     /**

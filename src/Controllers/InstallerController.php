@@ -98,11 +98,11 @@ class InstallerController extends Controller
 
     private function convertToBytes($val): int|string
     {
-        if(is_numeric($val)) {
+        if (is_numeric($val)) {
             return $val;
         }
         $val = trim($val);
-        $last = strtolower($val[strlen($val)-1]);
+        $last = strtolower($val[strlen($val) - 1]);
         $val = substr($val, 0, -1);
         switch($last) {
             case 'g':

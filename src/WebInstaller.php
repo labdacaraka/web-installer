@@ -100,7 +100,6 @@ class WebInstaller
             $env->setValue('DB_PASSWORD', '');
 
             config('database.connections.'.$dbConnection.'.url')->set(session()->get('installation.database_settings.db_url'));
-
         } else {
             $env->setValue('DATABASE_URL', '');
             $env->setValue('DB_HOST', session()->get('installation.database_settings.db_host'));

@@ -78,6 +78,7 @@ class WebInstaller
      */
     public function install(): string
     {
+        $dbConnection = session()->get('installation.database_settings.db_connection');
         $env = new Env();
         $env->setValue('APP_NAME', session()->get('installation.app_settings.app_name'));
         $env->setValue('APP_ENV', session()->get('installation.app_settings.app_env'));
@@ -97,6 +98,8 @@ class WebInstaller
             $env->setValue('DB_DATABASE', '');
             $env->setValue('DB_USERNAME', '');
             $env->setValue('DB_PASSWORD', '');
+
+            config('database.connections.'. $dbConnection .'.url', session()->get('installation.database_settings.db_url'));
         } else {
             $env->setValue('DATABASE_URL', '');
             $env->setValue('DB_HOST', session()->get('installation.database_settings.db_host'));
@@ -104,6 +107,12 @@ class WebInstaller
             $env->setValue('DB_DATABASE', session()->get('installation.database_settings.db_name'));
             $env->setValue('DB_USERNAME', session()->get('installation.database_settings.db_username'));
             $env->setValue('DB_PASSWORD', session()->get('installation.database_settings.db_password'));
+
+            config('database.connections.'. $dbConnection .'.host', session()->get('installation.database_settings.db_host'));
+            config('database.connections.'. $dbConnection .'.port', session()->get('installation.database_settings.db_port'));
+            config('database.connections.'. $dbConnection .'.database', session()->get('installation.database_settings.db_name'));
+            config('database.connections.'. $dbConnection .'.username', session()->get('installation.database_settings.db_username'));
+            config('database.connections.'. $dbConnection .'.password', session()->get('installation.database_settings.db_password'));
         }
         session()->forget('installation');
         Artisan::call('web-installer');

@@ -81,7 +81,7 @@ class InstallerController extends Controller
             $phpSettings[$requiredPhpSetting] = [
                 'current' => ini_get($requiredPhpSetting),
                 'required' => $requiredPhpSettingValue,
-                'compatible' => $this->convertToBytes(ini_get($requiredPhpSetting)) >= $this->convertToBytes($requiredPhpSettingValue)
+                'compatible' => $this->convertToBytes(ini_get($requiredPhpSetting)) >= $this->convertToBytes($requiredPhpSettingValue) || $this->convertToBytes(ini_get($requiredPhpSetting)) === -1,
             ];
             if (! $phpSettings[$requiredPhpSetting]['compatible']) {
                 $phpSettingCompatible = false;
